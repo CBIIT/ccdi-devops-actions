@@ -1,0 +1,35 @@
+name: AWS Auth 
+run-name: AWS Auth
+permissions: 
+  contents: read 
+  id-token: write
+on: [workflow_dispatch]
+  # workflow_call:
+  #   secrets:
+  #     oidc-role: 
+  #       required: true 
+  #       description: ARN of the OIDC Role to Assume
+  #     mgmt-account-id:
+  #       required: true 
+  #       description: The account ID for the central ECR registry
+jobs:
+  auth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Account Authentication
+        id: account
+        uses: aws-actions/configure-aws-credentials@v1-node16
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: us-east-1
+          role-session-name: github
+      - name: Print ID 
+        run: echo ${{ steps.account.outputs.* }}
+      - name: Check ID 
+        id: check 
+        run: aws sts get-caller-identity --query "Account" --output text
+      - name: Print ID 
+        run: echo ${{ steps.check.outputs.* }}
+      - name: ECR Login
+        id: ecr
+        uses: aws-actions/amazon-ecr-login@v1
