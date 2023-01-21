@@ -3,7 +3,7 @@ run-name: AWS Auth
 permissions: 
   contents: read 
   id-token: write
-on: workflow_dispatch
+on: [workflow_dispatch]
   # workflow_call:
   #   secrets:
   #     oidc-role: 
