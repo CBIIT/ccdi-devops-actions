@@ -10,11 +10,11 @@ on:
         required: true 
         description: ARN of the OIDC Role to Assume
 jobs:
-  account-auth:
+  auth:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure AWS Credentials
-        id: auth
+      - name: Account Authentication
+        id: account
         uses: aws-actions/configure-aws-credentials@v1-node16
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
@@ -23,5 +23,5 @@ jobs:
       - name: Check ID 
         run: aws sts get-caller-identity --query "Account" --output text
       - name: ECR Login
-        id: login
+        id: ecr
         uses: aws-actions/amazon-ecr-login@v1
