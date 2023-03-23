@@ -23,13 +23,11 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: us-east-1
           role-session-name: github
-      - name: Print ID 
-        run: echo ${{ steps.account.outputs.* }}
-      - name: Check ID 
+      - name: Get ID 
         id: check 
-        run: aws sts get-caller-identity --query "Account" --output text
+        run: var=`echo aws sts get-caller-identity --query "Account" --output text` >> $GITHUB_ENV
       - name: Print ID 
-        run: echo ${{ steps.check.outputs.* }}
+        run: echo ${{ env.var }}
       - name: ECR Login
         id: ecr
         uses: aws-actions/amazon-ecr-login@v1
