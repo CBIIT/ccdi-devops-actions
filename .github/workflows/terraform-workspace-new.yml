@@ -13,8 +13,6 @@ on:
     secrets:
       AWS_ROLE_TO_ASSUME:
         required: true
-      AWS_REGION: 
-        required: true
 jobs:
   terraform-workspace-new:
     runs-on: ubuntu-latest
@@ -25,7 +23,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
       - name: Terraform Init
