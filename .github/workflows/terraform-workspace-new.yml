@@ -2,18 +2,18 @@ name: Terraform Workspace New
 on:
   workflow_call:
     inputs:
-      workspace-name:
+      workspace_name:
         description: 'Name of the workspace to create'
         required: true
         type: string
-      tf-backend-config:
+      tf_backend_config:
         description: 'file location for backend configuration'
         required: true
         type: string
     secrets:
-      AWS-ROLE-TO-ASSUME:
+      AWS_ROLE_TO_ASSUME:
         required: true
-      AWS-REGION: 
+      AWS_REGION: 
         required: true
 jobs:
   terraform-workspace-new:
@@ -24,7 +24,7 @@ jobs:
       - name: Configure AWS Credentials For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2.0.3
