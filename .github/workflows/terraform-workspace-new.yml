@@ -1,0 +1,37 @@
+name: Terraform Workspace New
+on:
+  workflow_call:
+    inputs:
+      workspace-name:
+        description: 'Name of the workspace to create'
+        required: true
+        type: string
+      tf-backend-config:
+        description: 'file location for backend configuration'
+        required: true
+        type: string
+    secrets:
+      AWS-ROLE-TO-ASSUME:
+        required: true
+      AWS-REGION: 
+        required: true
+jobs:
+  terraform-workspace-new:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials For GitHub Actions
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+      - name: Terraform Init
+        run: terraform init -reconfigure -backend-config=${{ inputs.tf-backend-config }}
+      - name: Terraform Workspace New
+        run: terraform workspace new ${{ inputs.workspace-name }}
+      - name: Terraform Workspace Show
+        run: terraform workspace show
+      
