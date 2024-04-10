@@ -1,0 +1,83 @@
+name: NCI Terraform Plan
+on:
+  workflow_call:
+    inputs:
+      source-repository:
+        type: string
+        description: 'The repository that contains the Terraform code to processes'
+        required: true
+      source-branch:
+        type: string
+        description: 'The branch that contains the Terraform code to processes'
+        required: true
+        default: 'main'
+      workspace-name:
+        type: string
+        description: 'The name of the Terraform workspace to use'
+        default: 'default'
+        required: true
+      backend-config-file-path:
+        type: string
+        description: 'The path to the backend config file'
+        required: true
+      tf-vars-file-path:
+        type: string
+        description: 'The path to the Terraform variables (.tfvars) file'
+    secrets:
+      aws-role-to-assume:
+        description: 'The role to assume to run the Terraform code'
+        required: true
+      aws-region:
+        description: 'The AWS region to run the Terraform code'
+        required: true
+env:
+  uid: ${{inputs.source-repository}}-${{ github.run_number }}-${{ github.run_attempt }}
+jobs:
+  terraform-plan:
+    name: Terraform Plan
+    outputs:
+      artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      artifact-url: ${{ steps.upload.outputs.artifact-url }}
+      
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check-Out Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.source-repository}}
+          ref: ${{ inputs.source-branch }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+          
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ secrets.AWS-REGION }}
+          role-session-name: ${{ github.actor}}
+
+      - name: Terraform Init
+        run: terraform init -upgrade -reconfigure -backend-config=${{ inputs.backend-config-file-path }}
+
+      - name: Terraform Workspace Select
+        run: terraform workspace select -or-create ${{ inputs.workspace-name }}
+
+      - name: Terraform Validate
+        run: terraform validate -var-file=${{ inputs.tf-vars-file-path }} 
+
+      - name: Terraform Plan 
+        run: terraform plan -var-file=${{ inputs.tf-vars-file-path }} -out=tfplan
+
+      - name: Terraform Show Plan
+        run: terraform show -no-color tfplan > tfplan-${{ env.uid }}.txt
+      
+      - name: Upload Plan Artifact
+        id: upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: TerraformPlan
+          path: tfplan-${{ env.uid }}.txt
+
+
+
