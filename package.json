@@ -1,0 +1,15 @@
+{
+  "name": "ctos-terraform-custom-action",
+  "version": "1.0.0",
+  "description": "A custom action that facilitates the terrafrom init, plan, and apply workflow",
+  "main": "index.js",
+  "scripts": {
+    "build": "ncc build src/createIssue.js -o dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/ncc": "^0.38.1"
+  }
+}
