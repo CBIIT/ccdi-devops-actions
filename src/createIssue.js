@@ -14,7 +14,7 @@ async function action() {
     const { newIssue } = await octokit.rest.issues.create({
         ...context.repo,
         title: title,
-        body: body
+        body: body.join('\n')
     });
 
     core.setOutput('issue_number', newIssue.number);
