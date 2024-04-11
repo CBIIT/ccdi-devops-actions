@@ -26,9 +26,9 @@ async function run() {
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
     const { issueNumber, issueUrl } = await createNewIssue( client, owner, repo, title, body );
+    console.log(`Issue created: ${issueUrl}`);
+    console.log(`Issue number: ${issueNumber}`);
 
-    console.log(`Issue ${issueNumber} created: ${issueUrl}`);
-    console.log(`Issue state: ${issueState}`);
 }
 
 run();
