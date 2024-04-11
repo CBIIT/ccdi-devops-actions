@@ -6,7 +6,7 @@ async function action() {
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
     // print all the environment variables
-    console.log(process.env);
+    console.log(process.env.INPUT_LABEL);
 
     // using octokit, get the input titled 'label' 
     label = process.env.LABEL;
