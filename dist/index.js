@@ -29787,7 +29787,7 @@ async function action() {
     console.log(process.env.INPUT_LABEL);
 
     // using octokit, get the input titled 'label' 
-    label = process.env.INPUT_LABEL;
+    const label = process.env.INPUT_LABEL;
     console.log(label);
 
     const { data: issues } = await octokit.issues.create({
