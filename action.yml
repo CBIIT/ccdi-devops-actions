@@ -12,7 +12,7 @@ inputs:
   token:
     description: 'The GitHub token to use'
     required: true
-  string:
+  label:
     description: 'A string input'
     required: false
     default: 'default value'
