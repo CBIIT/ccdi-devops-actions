@@ -29783,8 +29783,12 @@ async function action() {
     const octokit = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
+    // print all the environment variables
+    console.log(process.env);
+
     // using octokit, get the input titled 'label' 
-    console.log(process.env.string)
+    label = process.env.LABEL;
+    console.log(label);
 
     const { data: issues } = await octokit.issues.create({
         owner: owner,
