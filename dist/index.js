@@ -29778,6 +29778,7 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_action__WEBPACK_IMPORTED_MODULE_0__);
 
 
+
 // Create a new issue and return the issue number and URL so that it can be used in the next steps in the run function
 
 async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueBody ) {
@@ -29797,6 +29798,19 @@ async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueB
 }
 
 
+// Get the README.md file from the repository and return the content
+
+async function getReadmeFile( client, owner, repo ) {
+    const { data: readme } = await client.repos.getContent({
+        owner: owner,
+        owner: repo,
+        path: "README.md"
+    });
+
+    return Buffer.from(readme.content, "base64").toString();
+}
+
+
 async function run() {
     const client = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
     const title = process.env.INPUT_TITLE;
@@ -29806,6 +29820,9 @@ async function run() {
     const { issueNumber, issueUrl } = await createNewIssue( client, owner, repo, title, body );
     console.log(`Issue created: ${issueUrl}`);
     console.log(`Issue number: ${issueNumber}`);
+
+    const readmeContent = await getReadmeFile( client, owner, repo );
+    console.log(`README.md content: ${readmeContent}`);
 
 }
 
