@@ -29794,7 +29794,7 @@ async function getPlanContent( client, org, repo, artifact ) {
         archive_format: 'zip'
     });
 
-    return Buffer.from(content);
+    return Buffer.from(content).toString('base64');
 }
 
 
