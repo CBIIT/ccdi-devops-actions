@@ -14,12 +14,14 @@ async function action() {
     const { newIssue } = await octokit.rest.issues.create({
         ...context.repo,
         title: title,
-        body: body
+        body: 'test'
     });
 
     core.setOutput('issue_number', newIssue.number);
 
-
+    // log the type of const body 
+    console.log(`The type of body: ${typeof body}`);
+    console.log(body);
     console.log(`The event context: ${JSON.stringify(context, null, 2)}`);
     console.log(`The new issue: ${JSON.stringify(newIssue, null, 2)}`);
 }
