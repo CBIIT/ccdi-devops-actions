@@ -4,7 +4,7 @@ import { Octokit } from "@octokit/action";
 
 async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueBody ) {
 
-    const { data: issue } = await octokit.issues.create({
+    const { data: issue } = await client.issues.create({
         owner: issueOwner,
         repo: issueRepo,
         title: issueTitle,
