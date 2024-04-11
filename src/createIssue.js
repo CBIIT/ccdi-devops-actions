@@ -3,14 +3,16 @@ import { Octokit } from "@octokit/action";
 
 async function action() {
     const octokit = new Octokit();
+
+    const title = process.env.INPUT_TITLE;
+    const body = process.env.INPUT_BODY;
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+    
 
-    // print all the environment variables
-    console.log(process.env.INPUT_LABEL);
-
-    // using octokit, get the input titled 'label' 
-    const label = process.env.INPUT_LABEL;
-    console.log(label);
+    console.log('title:', title)
+    console.log('body:', body)
+    console.log('owner:', owner)
+    console.log('repo:', repo)
 
     const { data: issues } = await octokit.issues.create({
         owner: owner,
