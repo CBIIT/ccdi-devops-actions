@@ -8,19 +8,21 @@ on:
             - main
             - dev
 
+
+
 jobs:
     test:
         runs-on: ubuntu-latest
+        env:
+            artifact: tfplan
         steps:
             - uses: actions/checkout@v3
             - run: ls -la
-            - name: upload readme
-              uses: actions/upload-artifact@v4
+            - uses: actions/upload-artifact@v4
               with:
-                  name: readme
+                  name: ${{ env.artifact }}
                   path: README.md
             - uses: ./
               with:
-                  title: "test issue title"
-                  body: "test issue body"
                   token: ${{ secrets.GITHUB_TOKEN }}
+                  artifact: ${{ env.artifact }}

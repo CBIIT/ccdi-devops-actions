@@ -3,19 +3,14 @@ description: 'Create a GitHub issue from a workflow run'
 author: 'Me'
 
 inputs:
-  title:
-    description: 'The title of the issue'
-    required: true
-  body:
-    description: 'The body of the issue'
-    required: true
   token:
     description: 'The GitHub token to use'
     required: true
-  label:
-    description: 'A string input'
+  artifact:
+    description: 'The name of the plan artifact'
     required: false
-    default: 'default value'
+    default: 'tfplan'
+
 
 runs:
   using: 'node20'

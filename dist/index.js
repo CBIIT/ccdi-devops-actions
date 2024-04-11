@@ -29779,51 +29779,47 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 
-// Create a new issue and return the issue number and URL so that it can be used in the next steps in the run function
+async function getPlanContent( client, org, repo, artifact ) {
+    const { data: plan } = await client.actions.listArtifactsForWorkflowRun({
+        owner: org,
+        repo: repo,
+        run_id: process.env.GITHUB_RUN_ID,
+        name: artifact
+    });
 
-async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueBody ) {
+    const { data: content } = await client.actions.downloadArtifact({
+        owner: org,
+        repo: repo,
+        artifact_id: plan.id,
+        archive_format: 'zip'
+    });
 
+    return Buffer.from(content);
+}
+
+
+async function createNewIssue( client, org, repo, artifact ) {
+    const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}`
+    const issueBody = await getPlanContent( client, org, repo, artifact );
     const { data: issue } = await client.issues.create({
-        owner: issueOwner,
-        repo: issueRepo,
+        owner: org,
+        repo: repo,
         title: issueTitle,
         body: issueBody
     });
     
-    const issueNumber = issue.number;
-    const issueUrl = issue.html_url;
-    const issueState = issue.state;
-
-    return { issueNumber, issueUrl };
-}
-
-
-// Get the README.md file from the repository and return the content
-
-async function getReadmeFile( client, owner, repo ) {
-    const { data: readme } = await client.repos.getContent({
-        owner: owner,
-        owner: repo,
-        path: "README.md"
-    });
-
-    return Buffer.from(readme.content, "base64").toString();
+    console.log(`Issue created: ${issue.html_url}`)
+    return issue.number;
 }
 
 
 async function run() {
     const client = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
-    const title = process.env.INPUT_TITLE;
-    const body = process.env.INPUT_BODY;
-    const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
+    const artifact = process.env.INPUT_ARTIFACT;
+    const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
-    const { issueNumber, issueUrl } = await createNewIssue( client, owner, repo, title, body );
-    console.log(`Issue created: ${issueUrl}`);
+    const issueNumber = await createNewIssue( client, org, repo, artifact );
     console.log(`Issue number: ${issueNumber}`);
-
-    const readmeContent = await getReadmeFile( client, owner, repo );
-    console.log(`README.md content: ${readmeContent}`);
-
 }
 
 run();
