@@ -29778,31 +29778,38 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_action__WEBPACK_IMPORTED_MODULE_0__);
 
 
+// Create a new issue and return the issue number and URL so that it can be used in the next steps in the run function
 
-async function action() {
-    const octokit = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
+async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueBody ) {
 
+    const { data: issue } = await octokit.issues.create({
+        owner: issueOwner,
+        repo: issueRepo,
+        title: issueTitle,
+        body: issueBody
+    });
+    
+    const issueNumber = issue.number;
+    const issueUrl = issue.html_url;
+    const issueState = issue.state;
+
+    return { issueNumber, issueUrl };
+}
+
+
+async function run() {
+    const client = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
     const title = process.env.INPUT_TITLE;
     const body = process.env.INPUT_BODY;
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-    
 
-    console.log('title:', title)
-    console.log('body:', body)
-    console.log('owner:', owner)
-    console.log('repo:', repo)
+    const { issueNumber, issueUrl } = await createNewIssue( client, owner, repo, title, body );
 
-    const { data: issues } = await octokit.issues.create({
-        owner: owner,
-        repo: repo,
-        title: "New issue created by Octokit!",
-        body: "This issue was created using the Octokit.js library."
-    });
-
-    console.log(`Created issue: ${issues.html_url}`);
+    console.log(`Issue ${issueNumber} created: ${issueUrl}`);
+    console.log(`Issue state: ${issueState}`);
 }
 
-action();
+run();
 })();
 
 module.exports = __webpack_exports__;

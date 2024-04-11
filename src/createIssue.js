@@ -1,27 +1,34 @@
 import { Octokit } from "@octokit/action";
 
+// Create a new issue and return the issue number and URL so that it can be used in the next steps in the run function
 
-async function action() {
-    const octokit = new Octokit();
+async function createNewIssue( client, issueOwner, issueRepo, issueTitle, issueBody ) {
 
+    const { data: issue } = await octokit.issues.create({
+        owner: issueOwner,
+        repo: issueRepo,
+        title: issueTitle,
+        body: issueBody
+    });
+    
+    const issueNumber = issue.number;
+    const issueUrl = issue.html_url;
+    const issueState = issue.state;
+
+    return { issueNumber, issueUrl };
+}
+
+
+async function run() {
+    const client = new Octokit();
     const title = process.env.INPUT_TITLE;
     const body = process.env.INPUT_BODY;
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-    
 
-    console.log('title:', title)
-    console.log('body:', body)
-    console.log('owner:', owner)
-    console.log('repo:', repo)
+    const { issueNumber, issueUrl } = await createNewIssue( client, owner, repo, title, body );
 
-    const { data: issues } = await octokit.issues.create({
-        owner: owner,
-        repo: repo,
-        title: "New issue created by Octokit!",
-        body: "This issue was created using the Octokit.js library."
-    });
-
-    console.log(`Created issue: ${issues.html_url}`);
+    console.log(`Issue ${issueNumber} created: ${issueUrl}`);
+    console.log(`Issue state: ${issueState}`);
 }
 
-action();
+run();
