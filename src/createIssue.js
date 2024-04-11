@@ -9,12 +9,12 @@ async function action() {
     
 
     const title = core.getInput('title', { required: true });
-    const body = core.getMultilineInput("body", { required: true });
+    const body = core.getInput("body", { required: true });
 
     const { newIssue } = await octokit.rest.issues.create({
         ...context.repo,
         title: title,
-        body: body.join('\n')
+        body: body
     });
 
     core.setOutput('issue_number', newIssue.number);
