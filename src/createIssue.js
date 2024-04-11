@@ -9,19 +9,14 @@ async function getPlanContent( client, org, repo, artifact ) {
         name: artifact
     });
 
+    const { data: content } = await client.actions.downloadArtifact({
+        owner: org,
+        repo: repo,
+        artifact_id: plan.artifacts[0].id,
+        archive_format: 'zip'
+    });
 
-    // const { data: content } = await client.actions.downloadArtifact({
-    //     owner: org,
-    //     repo: repo,
-    //     artifact_id: plan.artifacts[0].id;
-    //     archive_format: 'zip'
-    // });
-
-    // return Buffer.from(content);
-
-
-    console.log(`Plan id: ${plan.artifacts[0].id}`)
-    return ("Plan content");
+    return Buffer.from(content);
 }
 
 
