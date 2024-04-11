@@ -1,39 +1,21 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import { Octokit } from "@octokit/action";
+
 
 async function action() {
-    const token = core.getInput('TOKEN');
-    console.log(`The type of token: ${typeof token}`);
-    console.log(`The token: ${token}`);
+    const octokit = new Octokit();
+    const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
+    // using octokit, get the input titled 'label' 
+    console.log(process.env.string)
 
-    const octokit = github.getOctokit(token);
-    console.log(`The type of octokit: ${typeof octokit}`);
-    console.log(`The octokit: ${octokit}`);
+    const { data: issues } = await octokit.issues.create({
+        owner: owner,
+        repo: repo,
+        title: "New issue created by Octokit!",
+        body: "This issue was created using the Octokit.js library."
+    });
 
-
-    const { context = {} } = github;
-    console.log(`The type of context: ${typeof context}`);
-    console.log(`The context: ${context}`);
-
-
-    const title = core.getInput('title', { required: true });
-    console.log(`The type of title: ${typeof title}`)
-    console.log(`The title: ${title}`);
-
-
-    const body = core.getInput("body", { required: true });
-    console.log(`The type of body: ${typeof body}`)
-    console.log(`The body: ${body}`);
-
-    // const { newIssue } = await octokit.rest.issues.create({
-    //     ...context.repo,
-    //     title: title,
-    //     body: 'test'
-    // });
-
-    // core.setOutput('issue_number', newIssue.number);
-
+    console.log(`Created issue: ${issues.html_url}`);
 }
 
 action();

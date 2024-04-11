@@ -12,6 +12,10 @@ inputs:
   token:
     description: 'The GitHub token to use'
     required: true
+  string:
+    description: 'A string input'
+    required: false
+    default: 'default value'
 
 runs:
   using: 'node20'
