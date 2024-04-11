@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/action";
 
 
 async function getPlanContent( client, org, repo, artifact ) {
-    const { data: plan } = await client.actions.listArtifactsForWorkflowRun({
+    const { data: plan } = await client.actions.listWorkflowRunArtifacts({
         owner: org,
         repo: repo,
         run_id: process.env.GITHUB_RUN_ID,
