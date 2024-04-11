@@ -20,8 +20,8 @@ jobs:
             - run: ls -la
             - uses: actions/upload-artifact@v4
               with:
-                  name: ${{ env.artifact }}
-                  path: README.md
+                  name: tfplan
+                  path: README.txt
             - uses: ./
               with:
                   token: ${{ secrets.GITHUB_TOKEN }}
