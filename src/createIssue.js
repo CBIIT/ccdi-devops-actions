@@ -6,7 +6,7 @@ async function action() {
     const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
 
     // using octokit, get the input titled 'label' 
-    label = process.env.label;
+    label = process.env.LABEL;
     console.log(label);
 
     const { data: issues } = await octokit.issues.create({
