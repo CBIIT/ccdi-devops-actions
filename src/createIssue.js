@@ -3,27 +3,37 @@ const github = require('@actions/github');
 
 async function action() {
     const token = core.getInput('TOKEN');
+    console.log(`The type of token: ${typeof token}`);
+    console.log(`The token: ${token}`);
+
+
     const octokit = github.getOctokit(token);
+    console.log(`The type of octokit: ${typeof octokit}`);
+    console.log(`The octokit: ${octokit}`);
+
 
     const { context = {} } = github;
-    
+    console.log(`The type of context: ${typeof context}`);
+    console.log(`The context: ${context}`);
+
 
     const title = core.getInput('title', { required: true });
+    console.log(`The type of title: ${typeof title}`)
+    console.log(`The title: ${title}`);
+
+
     const body = core.getInput("body", { required: true });
+    console.log(`The type of body: ${typeof body}`)
+    console.log(`The body: ${body}`);
 
-    const { newIssue } = await octokit.rest.issues.create({
-        ...context.repo,
-        title: title,
-        body: 'test'
-    });
+    // const { newIssue } = await octokit.rest.issues.create({
+    //     ...context.repo,
+    //     title: title,
+    //     body: 'test'
+    // });
 
-    core.setOutput('issue_number', newIssue.number);
+    // core.setOutput('issue_number', newIssue.number);
 
-    // log the type of const body 
-    console.log(`The type of body: ${typeof body}`);
-    console.log(body);
-    console.log(`The event context: ${JSON.stringify(context, null, 2)}`);
-    console.log(`The new issue: ${JSON.stringify(newIssue, null, 2)}`);
 }
 
 action();
