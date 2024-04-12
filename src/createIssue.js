@@ -11,7 +11,7 @@ async function readFile( file ) {
 
 async function createNewIssue( client, org, repo ) {
     const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`
-    const issueBody = await readFile( 'tfplan' );
+    const issueBody = await readFile( 'README.txt' );
 
     const { data: issue } = await client.issues.create({
         owner: org,
