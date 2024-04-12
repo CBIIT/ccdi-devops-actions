@@ -29783,6 +29783,9 @@ async function action() {
     const file = 'README.txt'
     const issueNumber = await createNewIssue( client, org, repo, file);
 
+    // log all environment variables
+    console.log(process.env)
+
     return issueNumber;
 }
 
