@@ -1,44 +1,42 @@
 import { readFile } from 'fs/promises';
+import { Octokit } from '@octokit/action';
 
 
-
-async function getContent( file ) {
+async function getPlanConent( file ) {
     const content = await readFile( file, 'utf8' );
     return content;
 }
 
-async function run() {
-    const plan = await getContent( 'README.txt' );
-    console.log( plan );
+async function createNewIssue( client, org, repo, file ) {
+    const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`
+    const issueBody = await getPlanConent( file );
+
+    const { data: issue } = await client.issues.create({
+        owner: org,
+        repo: repo,
+        title: issueTitle,
+        body: issueBody
+    });
+    
+    console.log(`Issue created: ${issue.html_url}`)
+    return issue.number;
 }
 
-run();
 
-// async function createNewIssue( client, org, repo ) {
-//     const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`
-//     const issueBody = await readFile( 'README.txt' );
+async function action() {
+    const client = new Octokit();
+    const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
+    const file = 'README.txt'
+    const issueNumber = await createNewIssue( client, org, repo, file);
 
-//     const { data: issue } = await client.issues.create({
-//         owner: org,
-//         repo: repo,
-//         title: issueTitle,
-//         body: issueBody
-//     });
-    
-//     console.log(`Issue created: ${issue.html_url}`)
-//     return issue.number;
+    return issueNumber;
+}
+
+action();
+
+// async function run() {
+//     const plan = await getContent( 'README.txt' );
+//     console.log( plan );
 // }
 
-
-// async function action() {
-
-
-
-//     const client = new Octokit();
-//     const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
-//     const issueNumber = await createNewIssue( client, org, repo );
-
-//     return issueNumber;
-// }
-
-// action();
+// run();
