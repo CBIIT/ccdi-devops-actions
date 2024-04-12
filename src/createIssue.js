@@ -1,16 +1,15 @@
-import fs from 'fs';
-import { Octokit } from "@octokit/action";
+const fs = require('fs');
 
 
-async function getPlanContent( file ) {
-    const content = fs.readFileSync(file, 'utf8');
-    console.log(content);
+async function getPlanContent( ) {
+    // using the fs module, list the files in the current directory
+    const files = fs.readdirSync('./');
+    console.log(files);
 };
 
 async function run() {
-    plan = await getPlanContent('README.txt');
-    console.log('Reading from main function:\n')
-    console.log(plan);
+    const content = await getPlanContent();
+    console.log( content );
 }
 
 run();
