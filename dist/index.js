@@ -31,9 +31,14 @@ const promises_namespaceObject = require("fs/promises");
 
 
 
+async function getContent( file ) {
+    const content = await (0,promises_namespaceObject.readFile)( file, 'utf8' );
+    return content;
+}
+
 async function run() {
-    const content = await (0,promises_namespaceObject.readFile)( 'README.txt', 'utf8' );
-    console.log( content );
+    const plan = await getContent( 'README.txt' );
+    console.log( plan );
 }
 
 run();

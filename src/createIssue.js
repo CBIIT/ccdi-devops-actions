@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 
 async function getContent( file ) {
     const content = await readFile( file, 'utf8' );
-    console.log( content );
+    return content;
 }
 
 async function run() {
