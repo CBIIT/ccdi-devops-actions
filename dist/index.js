@@ -61,16 +61,15 @@ var promises_default = /*#__PURE__*/__nccwpck_require__.n(promises_namespaceObje
 
 
 
-async function readFile( file ) {
-    promises_default().readFile( file, 'utf8', (err, data) => {
-        if (err) throw err;
-        return data;
-    });
-}
+async function getPlanContent( file ) {
+    const content = promises_default().readFileSync(file, 'utf8');
+    console.log(content);
+};
 
 async function run() {
-    const content = await readFile( 'README.txt' );
-    console.log( content );
+    plan = await getPlanContent('README.txt');
+    console.log('Reading from main function:\n')
+    console.log(plan);
 }
 
 run();

@@ -2,16 +2,15 @@ import fs from 'fs/promises';
 import { Octokit } from "@octokit/action";
 
 
-async function readFile( file ) {
-    fs.readFile( file, 'utf8', (err, data) => {
-        if (err) throw err;
-        return data;
-    });
-}
+async function getPlanContent( file ) {
+    const content = fs.readFileSync(file, 'utf8');
+    console.log(content);
+};
 
 async function run() {
-    const content = await readFile( 'README.txt' );
-    console.log( content );
+    plan = await getPlanContent('README.txt');
+    console.log('Reading from main function:\n')
+    console.log(plan);
 }
 
 run();
