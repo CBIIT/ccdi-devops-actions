@@ -53,14 +53,9 @@ var __webpack_exports__ = {};
 const fs = __nccwpck_require__(147);
 
 
-async function getPlanContent( ) {
-    // using the fs module, list the files in the current directory
-    const files = fs.readdirSync('./');
-    console.log(files);
-};
 
 async function run() {
-    const content = await getPlanContent();
+    const content = fs.readFileSync( 'README.txt', 'utf8' );
     console.log( content );
 }
 
