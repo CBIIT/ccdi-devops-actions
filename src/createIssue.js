@@ -14,6 +14,8 @@ async function run() {
     console.log( content );
 }
 
+run();
+
 // async function createNewIssue( client, org, repo ) {
 //     const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`
 //     const issueBody = await readFile( 'README.txt' );
