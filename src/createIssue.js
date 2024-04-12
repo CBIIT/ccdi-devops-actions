@@ -1,9 +1,10 @@
-const fs = require('fs');
+import { Octokit } from '@octokit/rest';
+import { readFile } from 'fs/promises';
 
 
 
 async function run() {
-    const content = fs.readFileSync( 'README.txt', 'utf8' );
+    const content = await readFile( 'README.txt', 'utf8' );
     console.log( content );
 }
 
