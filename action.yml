@@ -1,0 +1,18 @@
+name: 'Create GitHub Issue'
+description: 'Create a GitHub issue from a workflow run'
+author: 'Me'
+
+inputs:
+  token:
+    description: 'The GitHub token to use'
+    required: true
+  artifact:
+    description: 'The name of the plan artifact'
+    required: false
+    default: 'tfplan'
+
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+  
