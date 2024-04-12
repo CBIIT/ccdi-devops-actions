@@ -2,9 +2,14 @@ import { readFile } from 'fs/promises';
 
 
 
-async function run() {
-    const content = await readFile( 'README.txt', 'utf8' );
+async function getContent( file ) {
+    const content = await readFile( file, 'utf8' );
     console.log( content );
+}
+
+async function run() {
+    const plan = await getContent( 'README.txt' );
+    console.log( plan );
 }
 
 run();
