@@ -31,7 +31,7 @@ async function action() {
 
     const client = new Octokit();
     const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
-    const issueNumber = await createNewIssue( client, org, repo, issueBody );
+    const issueNumber = await createNewIssue( client, org, repo );
 
     return issueNumber;
 }
