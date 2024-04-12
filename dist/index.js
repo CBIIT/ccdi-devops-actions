@@ -53,16 +53,16 @@ var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
 
-;// CONCATENATED MODULE: external "fs/promises"
-const promises_namespaceObject = require("fs/promises");
-var promises_default = /*#__PURE__*/__nccwpck_require__.n(promises_namespaceObject);
+;// CONCATENATED MODULE: external "fs"
+const external_fs_namespaceObject = require("fs");
+var external_fs_default = /*#__PURE__*/__nccwpck_require__.n(external_fs_namespaceObject);
 ;// CONCATENATED MODULE: ./src/createIssue.js
 
 
 
 
 async function getPlanContent( file ) {
-    const content = promises_default().readFileSync(file, 'utf8');
+    const content = external_fs_default().readFileSync(file, 'utf8');
     console.log(content);
 };
 
