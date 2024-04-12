@@ -3,12 +3,10 @@ import { Octokit } from "@octokit/action";
 
 
 async function readFile( file ) {
-    try {
-        const data = await fs.readFile(file, { encoding: 'utf8' });
+    fs.readFile( file, 'utf8', (err, data) => {
+        if (err) throw err;
         return data;
-    } catch (err) {
-        console.error(`Error reading plan file: ${err}`);
-    }
+    });
 }
 
 async function createNewIssue( client, org, repo ) {
@@ -28,6 +26,9 @@ async function createNewIssue( client, org, repo ) {
 
 
 async function action() {
+
+
+
     const client = new Octokit();
     const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
     const issueNumber = await createNewIssue( client, org, repo, issueBody );

@@ -29773,34 +29773,30 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
+// ESM COMPAT FLAG
 __nccwpck_require__.r(__webpack_exports__);
-/* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(1231);
-/* harmony import */ var _octokit_action__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_octokit_action__WEBPACK_IMPORTED_MODULE_0__);
+
+;// CONCATENATED MODULE: external "fs/promises"
+const promises_namespaceObject = require("fs/promises");
+var promises_default = /*#__PURE__*/__nccwpck_require__.n(promises_namespaceObject);
+// EXTERNAL MODULE: ./node_modules/@octokit/action/dist-node/index.js
+var dist_node = __nccwpck_require__(1231);
+;// CONCATENATED MODULE: ./src/createIssue.js
 
 
 
-async function getPlanContent( client, org, repo, artifact ) {
-    const { data: plan } = await client.actions.listWorkflowRunArtifacts({
-        owner: org,
-        repo: repo,
-        run_id: process.env.GITHUB_RUN_ID,
-        name: artifact
+
+async function readFile( file ) {
+    promises_default().readFile( file, 'utf8', (err, data) => {
+        if (err) throw err;
+        return data;
     });
-
-    const { data: content } = await client.actions.downloadArtifact({
-        owner: org,
-        repo: repo,
-        artifact_id: plan.artifacts[0].id,
-        archive_format: 'zip'
-    });
-
-    return Buffer.from(content).toString('base64');
 }
 
+async function createNewIssue( client, org, repo ) {
+    const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}-${process.env.GITHUB_RUN_ATTEMPT}`
+    const issueBody = await readFile( 'tfplan' );
 
-async function createNewIssue( client, org, repo, artifact ) {
-    const issueTitle = `${process.env.GITHUB_ENV}-${process.env.GITHUB_RUN_ID}`
-    const issueBody = await getPlanContent( client, org, repo, artifact );
     const { data: issue } = await client.issues.create({
         owner: org,
         repo: repo,
@@ -29813,16 +29809,18 @@ async function createNewIssue( client, org, repo, artifact ) {
 }
 
 
-async function run() {
-    const client = new _octokit_action__WEBPACK_IMPORTED_MODULE_0__.Octokit();
-    const artifact = process.env.INPUT_ARTIFACT;
-    const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
+async function action() {
 
-    const issueNumber = await createNewIssue( client, org, repo, artifact );
-    console.log(`Issue number: ${issueNumber}`);
+
+
+    const client = new dist_node.Octokit();
+    const [org, repo] = process.env.GITHUB_REPOSITORY.split("/");
+    const issueNumber = await createNewIssue( client, org, repo, issueBody );
+
+    return issueNumber;
 }
 
-run();
+action();
 })();
 
 module.exports = __webpack_exports__;
