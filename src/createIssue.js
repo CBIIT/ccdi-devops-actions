@@ -1,4 +1,3 @@
-import { Octokit } from '@octokit/rest';
 import { readFile } from 'fs/promises';
 
 
